@@ -2,7 +2,7 @@ import random
 import arcade
 import math
 
-SPRITE_SCALING_PLAYER = 0.5
+SPRITE_SCALING_PLAYER = 0.05
 SPRITE_SCALING_COIN = 0.25
 COIN_COUNT = 50
 
@@ -65,7 +65,7 @@ class MyGame(arcade.Window):
 
         # Set up the player
         # Character image from kenney.nl
-        img = ":resources:images/animated_characters/female_person/femalePerson_idle.png"
+        img = "Hilisprite.PNG"
         self.player_sprite = arcade.Sprite(img, SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
