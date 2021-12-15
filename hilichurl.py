@@ -10,7 +10,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Starting Template"
 
-MOVEMENT_SPEED = 6
+MOVEMENT_SPEED = 5
 
 
 class Player(arcade.Sprite):
