@@ -49,7 +49,7 @@ class MyGame(arcade.Window):
         self.up_pressed = False
         self.down_pressed = False
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcade.set_background_color(arcade.color.ASPARAGUS)
 
         # If you have sprite lists, you should create them here,
         # and set them to None
