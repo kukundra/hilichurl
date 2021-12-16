@@ -2,18 +2,44 @@ import random
 import arcade
 import math
 
-SPRITE_SCALING_PLAYER = 0.05
+SPRITE_SCALING_PLAYER = 0.1
 SPRITE_SCALING_COIN = 0.25
 COIN_COUNT = 50
 
-SCREEN_WIDTH = 900
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Starting Template"
+SCREEN_WIDTH = 1500
+SCREEN_HEIGHT = 800
+SCREEN_TITLE = "Hilichurla"
 
 MOVEMENT_SPEED = 5
 
+# Index of textures, first element faces left, second faces right
+TEXTURE_LEFT = 0
+TEXTURE_RIGHT = 1
+TEXTURE_FRONT = 2
+TEXTURE_BACK = 3
 
 class Player(arcade.Sprite):
+    def __init__(self):
+        super().__init__()
+
+        self.scale = SPRITE_SCALING_PLAYER
+        self.textures = []
+
+        # Load a left facing texture and a right facing texture.
+        # flipped_horizontally=True will mirror the image we load.
+        texture = arcade.load_texture("Hilisprite_side.PNG")
+        self.textures.append(texture)
+        texture = arcade.load_texture("Hilisprite_side.PNG",
+                                      flipped_horizontally=True)
+        self.textures.append(texture)
+        texture = arcade.load_texture("Hilisprite.PNG")
+        self.textures.append(texture)
+        texture = arcade.load_texture("Hilisprite_back.PNG")
+        self.textures.append(texture)
+
+        # By default, face right.
+        self.texture = texture
+        
     def update(self):
         # Move player.
         # Remove these lines if physics engine is moving player.
@@ -30,6 +56,15 @@ class Player(arcade.Sprite):
             self.bottom = 0
         elif self.top >= SCREEN_HEIGHT - 1:
             self.top = SCREEN_HEIGHT - 1
+
+        if self.change_x < 0:
+            self.texture = self.textures[TEXTURE_LEFT]
+        elif self.change_x > 0:
+            self.texture = self.textures[TEXTURE_RIGHT]
+        if self.change_y < 0:
+            self.texture = self.textures[TEXTURE_FRONT]
+        elif self.change_y > 0:
+            self.texture = self.textures[TEXTURE_BACK]
 
 
 class MyGame(arcade.Window):
@@ -57,19 +92,21 @@ class MyGame(arcade.Window):
     def setup(self):
         """ Set up the game variables. Call to re-start the game. """
         # Create your sprites and sprite lists here
-        self.player_list = arcade.SpriteList()
+        
         self.coin_list = arcade.SpriteList()
-
+        
         # Score
         self.score = 0
 
         # Set up the player
         # Character image from kenney.nl
-        img = "Hilisprite.PNG"
-        self.player_sprite = arcade.Sprite(img, SPRITE_SCALING_PLAYER)
-        self.player_sprite.center_x = 50
-        self.player_sprite.center_y = 50
-        self.player_list.append(self.player_sprite)
+        self.player_sprite_list = arcade.SpriteList()
+
+        # Set up the player
+        self.player_sprite = Player()
+        self.player_sprite.center_x = SCREEN_WIDTH / 2
+        self.player_sprite.center_y = SCREEN_HEIGHT / 2
+        self.player_sprite_list.append(self.player_sprite)
 
         for i in range(COIN_COUNT):
 
@@ -90,7 +127,7 @@ class MyGame(arcade.Window):
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
         self.coin_list.draw()
-        self.player_list.draw()
+        self.player_sprite_list.draw()
 
         # Put the text on the screen.
         output = f"Score: {self.score}"
@@ -112,7 +149,7 @@ class MyGame(arcade.Window):
         # Call update to move the sprite
         # If using a physics engine, call update player to rely on physics engine
         # for movement, and call physics engine here.
-        self.player_list.update()
+        self.player_sprite_list.update()
 
         if self.player_sprite.left <= 0:
             self.player_sprite.left = 0
